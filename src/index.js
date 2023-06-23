@@ -11,72 +11,77 @@ import * as d3Chromatic from 'd3-scale-chromatic'
  */
 
 (function (d3) {
+
   let bounds
+  bounds = d3.select('.graph').node().getBoundingClientRect()
+  const margin = { top: 35, right: 100, bottom: 35, left: 50 },
+    width = 700,
+    height = 550
+
+  const barColors = [
+    '#FAD02C',
+    '#FF0000'
+  ]
+
   let svgSize
   let graphSize
 
-  const margin = { top: 35, right: 300, bottom: 35, left: 300 }
+  const xScale = d3.scaleBand().padding(0.15)
+  const yScale = d3.scaleLinear()
 
-  const xScale = d3.scaleBand().padding(0.025)
-  const yScale = d3.scaleBand().padding(0.1)
-  const colorScale = d3.scaleSequential(d3Chromatic.interpolateGreens)
+  
 
-  d3.csv('./Performance.csv', d3.autoType).then(function (data) {
-    const opponents = data.map(d => { return d.Adversaire })
+  const svg = d3.select(".graph")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
 
-    viz.setColorScaleDomain(colorScale)
+  d3.csv('./Cartons.csv').then(function (data) {
+    const subgroups = data.columns.slice(1)
+    const equipes = data.map(d => { return d.Equipe })
 
-    legend.initGradient(colorScale)
-    legend.initLegendBar()
-    legend.initLegendAxis()
+    console.log(equipes)
 
-    const g = helper.generateG(margin)
+    const x = d3.scaleBand()
+      .domain(equipes)
+      .range([0, width])
+      .padding([0.2])
+    svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x).tickSizeOuter(0));
 
-    helper.appendAxes(g)
-    viz.appendRects(data, xScale, yScale, colorScale)
+    const y = d3.scaleLinear()
+    .domain([0, 20])
+    .range([ height, 0 ]);
 
-    setSizing()
-    build()
+    svg.append("g")
+    .call(d3.axisLeft(y).ticks(5));
 
-    /**
-     *   This function handles the graph's sizing.
-     */
-    function setSizing () {
-      bounds = d3.select('.graph').node().getBoundingClientRect()
+    const color = d3.scaleOrdinal()
+    .domain(subgroups)
+    .range(barColors)
 
-      svgSize = {
-        width: bounds.width,
-        height: 550
-      }
+    const stackedData = d3.stack()
+    .keys(subgroups)
+    (data)
 
-      graphSize = {
-        width: svgSize.width - margin.right - margin.left,
-        height: svgSize.height - margin.bottom - margin.top
-      }
+    svg.append("g")
+    .selectAll("g")
+    .data(stackedData)
+    .enter().append("g")
+      .attr("fill", function(d) { return color(d.key); })
+      .selectAll("rect")
+      .data(function(d) { return d; })
+      .enter().append("rect")
+        .attr("x", function(d) { return x(d.data.Equipe); })
+        .attr("y", function(d) { return y(d[1]); })
+        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+        .attr("width",x.bandwidth())
 
-      helper.setCanvasSize(svgSize.width, svgSize.height)
-    }
-
-    /**
-     *   This function builds the graph.
-     */
-    function build () {
-      viz.updateXScale(xScale, data, graphSize.width)
-      viz.updateYScale(yScale, opponents, graphSize.height)
-
-      viz.drawXAxis(xScale)
-      viz.drawYAxis(yScale, graphSize.width)
-
-      viz.updateRects(xScale, yScale, data, colorScale)
-
-      hover.setRectHandler(xScale, yScale, hover.rectSelected, hover.rectUnselected, hover.selectTicks, hover.unselectTicks)
-
-      legend.draw(margin.left / 1.5, margin.top + 5, graphSize.height - 10, 25, 'url(#gradient)', colorScale)
-    }
-
-    window.addEventListener('resize', () => {
-      setSizing()
-      build()
-    })
   })
+
+  
 })(d3)
