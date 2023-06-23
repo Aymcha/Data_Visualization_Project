@@ -1,10 +1,9 @@
 'use strict'
 
-import * as helper from './scripts/viz4-performance/helper.js'
-import * as viz from './scripts/viz4-performance/viz.js'
-import * as legend from './scripts/viz4-performance/legend.js'
-import * as hover from './scripts/viz4-performance/hover.js'
-import * as d3Chromatic from 'd3-scale-chromatic'
+import * as viz from './scripts/viz3-cartons/viz'
+import * as helper from './scripts/viz3-cartons/helper'
+import * as legend from './scripts/viz3-cartons/legend'
+
 
 /**
  * @file This file is the entry-point for the the code of the performance heatmap.
@@ -23,65 +22,33 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     '#FF0000'
   ]
 
-  let svgSize
-  let graphSize
-
-  const xScale = d3.scaleBand().padding(0.15)
+  const xScale = d3.scaleBand()
   const yScale = d3.scaleLinear()
 
   
-
-  const svg = d3.select(".graph")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+ // SVG
+ const svg = helper.generateSVG(width, height, margin)
 
   d3.csv('./Cartons.csv').then(function (data) {
     const subgroups = data.columns.slice(1)
-    const equipes = data.map(d => { return d.Equipe })
 
-    console.log(equipes)
+    viz.updateXScale(xScale, data, width)
+    viz.unpdateYScale(yScale, data, height)
 
-    const x = d3.scaleBand()
-      .domain(equipes)
-      .range([0, width])
-      .padding([0.2])
     svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickSizeOuter(0));
-
-    const y = d3.scaleLinear()
-    .domain([0, 20])
-    .range([ height, 0 ]);
-
+    .call(d3.axisBottom(xScale).tickSizeOuter(0));
     svg.append("g")
-    .call(d3.axisLeft(y).ticks(5));
+    .call(d3.axisLeft(yScale).ticks(5));
 
     const color = d3.scaleOrdinal()
     .domain(subgroups)
     .range(barColors)
 
-    const stackedData = d3.stack()
-    .keys(subgroups)
-    (data)
-
-    svg.append("g")
-    .selectAll("g")
-    .data(stackedData)
-    .enter().append("g")
-      .attr("fill", function(d) { return color(d.key); })
-      .selectAll("rect")
-      .data(function(d) { return d; })
-      .enter().append("rect")
-        .attr("x", function(d) { return x(d.data.Equipe); })
-        .attr("y", function(d) { return y(d[1]); })
-        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-        .attr("width",x.bandwidth())
-
+    viz.drawBars(data, color, xScale, yScale, svg)
   })
+
+  legend.drawLegend()
 
   
 })(d3)
