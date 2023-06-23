@@ -1,114 +1,87 @@
-
 /**
- * Sets the domain of the color scale
+ * Sets the domain and range of the X scale.
  *
- * @param {*} colorScale The color scale used in the heatmap
- * @param {object[]} data The data to be displayed
+ * @param {*} scale The x scale
+ * @param {object[]} data The data to be used
+ * @param {number} width The width of the graph
  */
-export function setColorScaleDomain (colorScale) {
-  colorScale.domain([0, 100])
+export function updateGroupXScale(scale, data, width) {
+  // TODO : Set the domain and range of the groups' x scale
+  const xDomain = data.map((act) => act.Act);
+  scale.domain(xDomain).range([0, width]);
 }
 
 /**
- * For each data element, appends a group 'g' to which an SVG rect is appended
+ * Sets the domain and range of the Y scale.
  *
- * @param {object[]} data The data to use for binding
- * @param xScale The scale for the x axis
- * @param yScale The scale for the y axis
- * @param colorScale The color scale used to set the rectangles' colors
+ * @param {*} scale The Y scale
+ * @param {object[]} data The data to be used
+ * @param {number} height The height of the graph
  */
-export function appendRects (data, xScale, yScale, colorScale) {
-  const svg = d3.select('#graph-g')
-  const groups = svg.selectAll('g:not(.x):not(.y)')
+export function updateYScale(scale, data, height) {
+  // TODO : Set the domain and range of the graph's y scale
+  const counts = data.flatMap((d) => d.Players.map((p) => p.Count));
+  const maxLineCount = d3.extent(counts)[1];
+  scale.domain([maxLineCount, 0]).range([0, height]);
+}
+
+/**
+ * Creates the groups for the grouped bar chart and appends them to the graph.
+ * Each group corresponds to an act.
+ *
+ * @param {object[]} data The data to be used
+ * @param {*} x The graph's x scale
+ */
+export function createGroups(data, x) {
+  // TODO : Create the groups
+  d3.select('#graph-g').selectAll('g.bar-group').remove();
+
+  d3.select('#graph-g')
+    .selectAll('g.bar-group')
     .data(data)
     .enter()
     .append('g')
-
-  groups.each(function (d) {
-    const group = d3.select(this)
-    const metrics = Object.keys(data[0]).filter(key => key !== 'Adversaire')
-    metrics.forEach(m => {
-      group
-        .append('rect')
-        .attr('class', `${m}-rect`)
-        .attr('x', xScale(m))
-        .attr('y', yScale(d.Adversaire))
-        .attr('width', xScale.bandwidth())
-        .attr('height', yScale.bandwidth())
-        .style('fill', colorScale(d[m]))
-    })
-  })
+    .attr('transform', (d) => 'translate(' + x(d.Act) + ',' + 0 + ')')
+    .attr('class', 'bar-group')
+    .datum((d) => d);
 }
 
 /**
- * Updates the domain and range of the scale for the x axis
+ * Draws the bars inside the groups
  *
- * @param {*} xScale The scale for the x axis
- * @param {object[]} data The data to be used
- * @param {number} width The width of the diagram
+ * @param {*} y The graph's y scale
+ * @param {*} xSubgroup The x scale to use to position the rectangles in the groups
+ * @param {string[]} players The names of the players, each corresponding to a bar in each group
+ * @param {number} height The height of the graph
+ * @param {*} color The color scale for the bars
+ * @param {*} tip The tooltip to show when each bar is hovered and hide when it's not
  */
-export function updateXScale (xScale, data, width) {
-  const domain = Object.keys(data[0]).filter(key => key !== 'Adversaire')
-  xScale.domain(domain).range([0, width])
-}
+export function drawBars(y, xSubgroup, players, height, color, tip) {
+  // TODO : Draw the bars
+  d3.selectAll('g.bar-group').each(function (d) {
+    var barWidth = xSubgroup.range()[1] / players.length;
+    var groupData = d3.select(this).datum();
+    players.forEach((player, i) => {
+      const playerObj = groupData.Players.find((x) => x.Player === player);
 
-/**
- * Updates the domain and range of the scale for the y axis
- *
- * @param {*} yScale The scale for the y axis
- * @param {string[]} opponents The opponents of Morocco
- * @param {number} height The height of the diagram
- */
-export function updateYScale (yScale, opponents, height) {
-  yScale.domain(opponents).range([0, height])
-}
+      if (playerObj) {
+        const barHeight = (playerObj.Count / y.domain()[0]) * y.range()[1];
 
-/**
- *  Draws the X axis at the top of the diagram.
- *
- *  @param {*} xScale The scale to use to draw the axis
- */
-export function drawXAxis (xScale) {
-  const axix = d3.select('.x')
-  axix.style('font-size', '11px').call(d3.axisTop(xScale))
-}
+        const bar = d3
+          .select(this)
+          .append('rect')
+          .attr('x', barWidth * i)
+          .attr('y', height - barHeight)
+          .attr('width', barWidth)
+          .attr('height', barHeight)
+          .attr('fill', color(i))
+          .on('mouseover', function (d) {
+            tip.show(playerObj, this);
+          })
+          .on('mouseout', tip.hide);
 
-/**
- * Draws the Y axis to the right of the diagram.
- *
- * @param {*} yScale The scale to use to draw the axis
- * @param {number} width The width of the graphic
- */
-export function drawYAxis (yScale, width) {
-  // TODO : Draw Y axis
-  const axix = d3.select('.y')
-  axix.attr('transform', 'translate(' + width + ', 0)')
-    .style('font-size', '11px')
-    .call(d3.axisRight(yScale))
-}
-
-/**
- * After the rectangles have been appended, this function dictates their position, size and fill color.
- *
- * @param {*} xScale The x scale used to position the rectangles
- * @param {*} yScale The y scale used to position the rectangles
- * @param {object[]} data The data to be used
- * @param {*} colorScale The color scale used to set the rectangles' colors
- */
-export function updateRects (xScale, yScale, data, colorScale) {
-  const metrics = Object.keys(data[0]).filter(key => key !== 'Adversaire')
-  const graph = d3.select('#graph-g')
-  const rectangles = graph.selectAll('rect').filter(function () { return metrics.includes(d3.select(this).attr('class').split('-')[0]) })
-
-  rectangles.each(function (d) {
-    const rect = d3.select(this)
-    const metric = rect.attr('class').split('-')[0]
-
-    rect
-      .attr('x', xScale(metric))
-      .attr('y', yScale(d.Adversaire))
-      .attr('width', xScale.bandwidth())
-      .attr('height', yScale.bandwidth())
-      .style('fill', colorScale(d[metric]))
-  })
+        bar.data([{ Act: groupData.Act, Player: playerObj }]);
+      }
+    });
+  });
 }

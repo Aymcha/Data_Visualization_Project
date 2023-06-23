@@ -93,3 +93,9 @@ button:hover, button:active {
   .axis path {
       opacity: 0;
   }
+
+  #chart-container {
+    width: 600px;
+    height: 400px;
+    margin: auto; /* Pour centrer le graphique horizontalement */
+  }
