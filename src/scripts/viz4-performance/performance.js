@@ -1,9 +1,9 @@
 'use strict'
 
-import * as helper from './scripts/viz4-performance/helper.js'
-import * as viz from './scripts/viz4-performance/viz.js'
-import * as legend from './scripts/viz4-performance/legend.js'
-import * as hover from './scripts/viz4-performance/hover.js'
+import * as helper from './helper.js'
+import * as viz from './viz.js'
+import * as legend from './legend.js'
+import * as hover from './hover.js'
 import * as d3Chromatic from 'd3-scale-chromatic'
 
 /**
@@ -43,7 +43,7 @@ export function buildHeatmap(){
      *   This function handles the graph's sizing.
      */
     function setSizing () {
-      bounds = d3.select('.graph').node().getBoundingClientRect()
+      bounds = d3.select('#heatmap').node().getBoundingClientRect()
 
       svgSize = {
         width: bounds.width,
