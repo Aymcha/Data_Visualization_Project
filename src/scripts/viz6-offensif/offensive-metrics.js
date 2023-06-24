@@ -14,9 +14,9 @@ import * as legend from './legend'
 
     let bounds
     bounds = d3.select('.graph').node().getBoundingClientRect()
-    const margin = { top: 35, right: 100, bottom: 100, left: 50 }, // increase bottom margin for rotated labels
-      width = 700,
-      height = 550
+    const margin = { top: 35, right: 100, bottom: 400, left: 50 }, // increase bottom margin for rotated labels
+      width = 1300,
+      height = 450
 
     const barColors = [
       '#FAD02C',
@@ -36,11 +36,20 @@ import * as legend from './legend'
       viz.unpdateYScale(yScale, data, height)
 
       svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + height +  ")")
         .call(d3.axisBottom(xScale).tickSizeOuter(0))
         .selectAll("text")  // select all the text elements for the xaxis
-        .attr("transform", "translate(-10,10)rotate(-45)")  // rotate the text
-        .style("text-anchor", "end");
+        .attr("transform", "translate(-10,10)rotate(-45)") // rotate the text
+        .style("text-anchor", "end")
+        .style("font-size", "14px")
+        .style("text-anchor", "end")
+      
+      // Add title for the x-axis
+      svg.append("text")
+      .attr("transform", `translate(${width / 2}, ${height + margin.top + 100})`) // add more space in the y direction
+      .style("text-anchor", "middle")
+      .style("font-size", "16px")
+      .text("Joueur"); // set the title text
 
       svg.append("g")
         .call(d3.axisLeft(yScale).ticks(5));

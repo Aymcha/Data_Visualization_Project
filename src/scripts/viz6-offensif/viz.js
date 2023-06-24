@@ -2,7 +2,7 @@ export function updateXScale(scale, data, width) {
     const joueurs = data.map(d => { return d.Joueur })
     scale.domain(joueurs)
         .range([0, width])
-        .padding([0.2])
+        .padding([0.05])
 }
 
 export function unpdateYScale(scale, data, height) {
