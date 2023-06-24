@@ -2,6 +2,7 @@ import * as viz from './scripts/viz1/viz.js.js'
 var width = 600
 var height = 400
 
+export function buildResultStackBar(){
 // Création de l'élément SVG
 var svg = d3.select('#chart-container')
   .append('svg')
@@ -13,3 +14,4 @@ d3.csv('./Résultats.csv')
   .then(function (data) {
     viz.createGraph(svg, data)
   })
+}
