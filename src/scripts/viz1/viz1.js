@@ -142,19 +142,6 @@ function addLegend (svg, colorScale) {
     })
 }
 
-// Fonction pour ajouter le titre
-/**
- * @param graph
- */
-function addChartTitle (graph) {
-  graph.append('text')
-    .attr('class', 'chart-title')
-    .attr('x', graphWidth / 2)
-    .attr('y', height - margin.bottom)
-    .attr('text-anchor', 'middle')
-    .text('Comparaison des résultats des demi-finalistes')
-}
-
 // Fonction principale de création du graphique
 /**
  * @param svg
@@ -172,5 +159,4 @@ export function createGraph (svg, data) {
   addXAxis(graph, xScale)
   addYAxis(graph, yScale)
   addLegend(svg, colorScale)
-  addChartTitle(graph)
 }
