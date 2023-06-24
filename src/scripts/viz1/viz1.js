@@ -1,5 +1,5 @@
 // Dimensions du graphique
-var width = 600
+var width = 500
 var height = 400
 
 // Marge du graphique

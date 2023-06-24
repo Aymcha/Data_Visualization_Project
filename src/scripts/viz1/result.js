@@ -1,4 +1,4 @@
-import * as viz from './scripts/viz1/viz.js.js'
+import * as viz from './viz1.js'
 var width = 600
 var height = 400
 
