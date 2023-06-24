@@ -62,10 +62,10 @@ button:hover, button:active {
     text-anchor: middle;
 }
 
-.viz-container{
+/* .viz-container{
     height: 100%;
     padding: 0 100px;
-}
+} */
 
 .graph {
     width: 100%;
