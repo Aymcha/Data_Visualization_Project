@@ -46,12 +46,12 @@ export function build () {
 
         svgSize = {
           width: bounds.width - 500,
-          height: 700 // increase the SVG height to 650 or a value that suits your design
+          height: 700
         }
 
         graphSize = {
           width: svgSize.width - margin.right - margin.left,
-          height: svgSize.height - margin.bottom - margin.top - 50 // reduce the graph height to leave space for the title at the bottom
+          height: svgSize.height - margin.bottom - margin.top - 50
         }
 
         helper.setCanvasSize(svgSize.width, svgSize.height)

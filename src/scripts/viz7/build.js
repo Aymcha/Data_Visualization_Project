@@ -4,9 +4,7 @@ import * as viz from './viz_7'
 import * as helper from './helper'
 import * as legend from './legend'
 
-/**
- *
- */
+
 export function build () {
   (function (d3) {
     const margin = { top: 35, right: 100, bottom: 50, left: 150 }
