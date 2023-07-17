@@ -1,2 +1,7 @@
-# IN8808_Project_Team_02
-https://inf8808-project-team02.netlify.app/
+# Data_Visualization_Project
+
+L'objectif principal de cette visualisation des données est de permettre aux amateurs de football de vivre l'excitation de la Coupe du Monde de manière immersive. Cette projection sera une visualisation dynamique des données, offrant une expérience captivante et interactive. Elle leur permettra de mieux comprendre la dynamique du tournoi, de comparer les performances des équipes et de partager leur enthousiasme avec d'autres passionnés de football. Grâce à cette visualisation, les spectateurs auront accès aux performances des équipes, les scores des matchs, les meilleurs buteurs, les cartons et d'autres aspects clés de la compétition. Ils pourront également interagir avec la visualisation pour obtenir des informations détaillées sur les équipes, les joueurs et les moments forts du tournoi. Dans le cadre de ce projet, nous nous concentrerons particulièrement sur l’équipe nationale du Maroc, ayant atteint les demi-finales de la Coupe du Monde 2022.
+
+The main objective of this data visualization is to allow football fans to experience the excitement of the World Cup in an immersive way. This projection will be a dynamic visualization of data, offering a captivating and interactive experience. It will enable them to better understand the tournament dynamics, compare team performances, and share their enthusiasm with other football enthusiasts. Through this visualization, viewers will have access to team performances, match scores, top goal scorers, cards, and other key aspects of the competition. They will also be able to interact with the visualization to obtain detailed information about teams, players, and highlights of the tournament. As part of this project, we will focus particularly on the national team of Morocco, which reached the semi-finals of the 2022 World Cup.
+
+link/Lien: https://inf8808-project-team02.netlify.app/
