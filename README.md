@@ -4,4 +4,4 @@ L'objectif principal de cette visualisation des données est de permettre aux am
 
 The main objective of this data visualization is to allow football fans to experience the excitement of the World Cup in an immersive way. This projection will be a dynamic visualization of data, offering a captivating and interactive experience. It will enable them to better understand the tournament dynamics, compare team performances, and share their enthusiasm with other football enthusiasts. Through this visualization, viewers will have access to team performances, match scores, top goal scorers, cards, and other key aspects of the competition. They will also be able to interact with the visualization to obtain detailed information about teams, players, and highlights of the tournament. As part of this project, we will focus particularly on the national team of Morocco, which reached the semi-finals of the 2022 World Cup.
 
-link/Lien: https://inf8808-project-team02.netlify.app/
+Link/Lien: https://inf8808-project-team02.netlify.app/
